@@ -6,6 +6,11 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Nyxel",
   description: "Nyxel",
+  icons: {
+    icon: "/nyxel-icon-20260803.svg",
+    shortcut: "/nyxel-icon-20260803.svg",
+    apple: "/nyxel-icon-20260803.svg",
+  },
 };
 
 const themeScript = `

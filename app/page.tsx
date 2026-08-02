@@ -9,16 +9,28 @@ const contacts = [
 
 const projects = [
   {
-    number: "01",
-    name: "Infinite Life",
-    description: "macOS cellular automaton wallpaper",
-    href: "https://github.com/Nyxeli0n/InfiniteLife",
+    number: "03",
+    name: "NEXT",
+    description: "Apple Reminders, one task at a time",
+    href: "https://github.com/Nyxeli0n/NEXT",
+    sourceHref: null,
+    newTab: true,
   },
   {
     number: "02",
+    name: "Infinite Life",
+    description: "macOS cellular automaton wallpaper",
+    href: "https://github.com/Nyxeli0n/InfiniteLife",
+    sourceHref: null,
+    newTab: true,
+  },
+  {
+    number: "01",
     name: "nyxelion.dev",
     description: "Personal website",
-    href: "https://github.com/Nyxeli0n/nyxel-site",
+    href: "/",
+    sourceHref: "https://github.com/Nyxeli0n/nyxel-site",
+    newTab: false,
   },
 ];
 
@@ -71,12 +83,28 @@ export default function Home() {
         <h2 id="projects-title">Projects</h2>
         <ul>
           {projects.map((project) => (
-            <li key={project.name}>
-              <a href={project.href} target="_blank" rel="noreferrer">
+            <li className="project-card" key={project.name}>
+              <a
+                className="project-link"
+                href={project.href}
+                target={project.newTab ? "_blank" : undefined}
+                rel={project.newTab ? "noreferrer" : undefined}
+              >
                 <small className="project-number">{project.number}</small>
                 <span>{project.name}</span>
-                <small>{project.description}</small>
+                <small className="project-description">{project.description}</small>
               </a>
+              {project.sourceHref && (
+                <a
+                  className="project-source"
+                  href={project.sourceHref}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={`View ${project.name} source on GitHub`}
+                >
+                  GitHub <span aria-hidden="true">↗</span>
+                </a>
+              )}
             </li>
           ))}
         </ul>
