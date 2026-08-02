@@ -5,7 +5,6 @@ import { useSyncExternalStore } from "react";
 const contacts = [
   { label: "X", href: "https://x.com/nyxeli0n" },
   { label: "GitHub", href: "https://github.com/Nyxeli0n" },
-  { label: "Mail", href: "mailto:nyxelion@icloud.com" },
 ];
 
 const projects = [
