@@ -11,9 +11,10 @@ const geistSans = localFont({
   display: "swap",
 });
 
-const geistPixel = localFont({
-  src: "./fonts/GeistPixel-Square.woff2",
-  variable: "--font-geist-pixel",
+const geistMono = localFont({
+  src: "./fonts/GeistMono-Variable.woff2",
+  variable: "--font-geist-mono",
+  weight: "100 900",
   display: "swap",
 });
 
@@ -45,7 +46,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistPixel.variable}`}
+      className={`${geistSans.variable} ${geistMono.variable}`}
       suppressHydrationWarning
     >
       <head>

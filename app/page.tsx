@@ -29,7 +29,7 @@ const projects = [
     name: "nyxelion.dev",
     description: "Personal website",
     href: "/",
-    sourceHref: "https://github.com/Nyxeli0n/nyxel-site",
+    sourceHref: null,
     newTab: false,
   },
 ];
