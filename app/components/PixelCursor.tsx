@@ -66,7 +66,6 @@ export default function PixelCursor() {
     if (!ctx) return;
 
     const particles: Particle[] = [];
-    const timers: number[] = [];
     let fonts = resolveFonts();
     let color = themeColor();
     let width = 0;
@@ -158,21 +157,13 @@ export default function PixelCursor() {
     }
 
     function spawnRipple(x: number, y: number) {
-      const rings = [
-        { delay: 0, count: 56, speed: 2.1, size: 7, life: 720, phase: 0 },
-        { delay: 45, count: 64, speed: 2.6, size: 6, life: 820, phase: 0.05 },
-        { delay: 95, count: 72, speed: 3.1, size: 6, life: 920, phase: 0.1 },
-        { delay: 150, count: 80, speed: 3.6, size: 5, life: 1000, phase: 0.15 },
-        { delay: 210, count: 88, speed: 4.1, size: 5, life: 1100, phase: 0.2 },
-      ] as const;
-
-      for (const ring of rings) {
-        const id = window.setTimeout(() => {
-          if (!running) return;
-          spawnRing(x, y, ring);
-        }, ring.delay);
-        timers.push(id);
-      }
+      spawnRing(x, y, {
+        count: 48,
+        speed: 1.35,
+        size: 6,
+        life: 420,
+        jitter: 0.015,
+      });
     }
 
     function onMove(event: PointerEvent) {
@@ -266,7 +257,6 @@ export default function PixelCursor() {
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("click", onClick);
       themeObserver.disconnect();
-      for (const id of timers) window.clearTimeout(id);
     };
   }, []);
 
