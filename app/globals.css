@@ -136,7 +136,7 @@ ul {
   bottom: -1px;
   left: 0;
   width: 0;
-  height: 1px;
+  height: 2px;
   background: var(--foreground);
   transition: width 0.3s ease-out;
   pointer-events: none;
