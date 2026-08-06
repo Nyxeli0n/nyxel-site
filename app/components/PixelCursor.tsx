@@ -10,7 +10,8 @@ const FONT_VARS = [
   "--font-pixel-line",
 ] as const;
 
-const GLYPHS = ["◆", "◇", "●", "○", "▲", "△", "■", "□", "+", "*", "x", "·", "N", "y", "X", "0", "1"] as const;
+const TRAIL_GLYPHS = ["·", "+", "x", "o", "n"] as const;
+const RIPPLE_GLYPHS = ["·", "+", "o", "x", "i", "n", "a"] as const;
 
 type Particle = {
   x: number;
@@ -22,6 +23,7 @@ type Particle = {
   size: number;
   glyph: string;
   font: string;
+  drag: number;
   spin: number;
   rotation: number;
 };
@@ -64,6 +66,7 @@ export default function PixelCursor() {
     if (!ctx) return;
 
     const particles: Particle[] = [];
+    const timers: number[] = [];
     let fonts = resolveFonts();
     let color = themeColor();
     let width = 0;
@@ -75,6 +78,7 @@ export default function PixelCursor() {
     let hasLast = false;
     let spawnBudget = 0;
     let running = true;
+    const maxParticles = 520;
 
     function resize() {
       dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -92,41 +96,82 @@ export default function PixelCursor() {
       color = themeColor();
     }
 
-    function spawn(
+    function pushParticle(p: Particle) {
+      if (particles.length >= maxParticles) particles.shift();
+      particles.push(p);
+    }
+
+    function spawnTrail(x: number, y: number) {
+      const count = Math.random() > 0.5 ? 2 : 1;
+      for (let i = 0; i < count; i += 1) {
+        const angle = rand(0, Math.PI * 2);
+        const speed = rand(0.2, 1.1);
+        pushParticle({
+          x: x + rand(-4, 4),
+          y: y + rand(-4, 4),
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          life: 0,
+          maxLife: rand(220, 420),
+          size: pick([6, 7, 8] as const),
+          glyph: pick(TRAIL_GLYPHS),
+          font: pick(fonts),
+          drag: 0.94,
+          spin: rand(-0.08, 0.08),
+          rotation: 0,
+        });
+      }
+    }
+
+    function spawnRing(
       x: number,
       y: number,
       opts: {
         count: number;
-        speed: [number, number];
-        size: [number, number];
-        life: [number, number];
-        spread?: number;
-        radial?: boolean;
+        speed: number;
+        size: number;
+        life: number;
+        jitter?: number;
+        phase?: number;
       },
     ) {
-      const maxParticles = 220;
+      const jitter = opts.jitter ?? 0.02;
+      const phase = opts.phase ?? 0;
       for (let i = 0; i < opts.count; i += 1) {
-        if (particles.length >= maxParticles) particles.shift();
-
-        const angle = opts.radial
-          ? (Math.PI * 2 * i) / opts.count + rand(-0.2, 0.2)
-          : rand(0, Math.PI * 2);
-        const speed = rand(opts.speed[0], opts.speed[1]);
-        const spread = opts.spread ?? 10;
-
-        particles.push({
-          x: x + rand(-spread, spread),
-          y: y + rand(-spread, spread),
+        const angle = phase + (Math.PI * 2 * i) / opts.count + rand(-jitter, jitter);
+        const speed = opts.speed * rand(0.97, 1.03);
+        pushParticle({
+          x,
+          y,
           vx: Math.cos(angle) * speed,
           vy: Math.sin(angle) * speed,
           life: 0,
-          maxLife: rand(opts.life[0], opts.life[1]),
-          size: rand(opts.size[0], opts.size[1]),
-          glyph: pick(GLYPHS),
+          maxLife: opts.life * rand(0.92, 1.08),
+          size: opts.size,
+          glyph: pick(RIPPLE_GLYPHS),
           font: pick(fonts),
-          spin: rand(-0.25, 0.25),
-          rotation: rand(0, Math.PI * 2),
+          drag: 1,
+          spin: 0,
+          rotation: angle,
         });
+      }
+    }
+
+    function spawnRipple(x: number, y: number) {
+      const rings = [
+        { delay: 0, count: 56, speed: 2.1, size: 7, life: 720, phase: 0 },
+        { delay: 45, count: 64, speed: 2.6, size: 6, life: 820, phase: 0.05 },
+        { delay: 95, count: 72, speed: 3.1, size: 6, life: 920, phase: 0.1 },
+        { delay: 150, count: 80, speed: 3.6, size: 5, life: 1000, phase: 0.15 },
+        { delay: 210, count: 88, speed: 4.1, size: 5, life: 1100, phase: 0.2 },
+      ] as const;
+
+      for (const ring of rings) {
+        const id = window.setTimeout(() => {
+          if (!running) return;
+          spawnRing(x, y, ring);
+        }, ring.delay);
+        timers.push(id);
       }
     }
 
@@ -141,47 +186,21 @@ export default function PixelCursor() {
         return;
       }
 
-      const dx = x - lastX;
-      const dy = y - lastY;
-      const dist = Math.hypot(dx, dy);
-      if (dist < 6) return;
+      const dist = Math.hypot(x - lastX, y - lastY);
+      if (dist < 7) return;
 
       spawnBudget += dist;
       lastX = x;
       lastY = y;
 
-      while (spawnBudget >= 10) {
-        spawnBudget -= 10;
-        spawn(x, y, {
-          count: Math.random() > 0.45 ? 3 : 2,
-          speed: [0.4, 2.8],
-          size: [10, 22],
-          life: [280, 620],
-          spread: 14,
-        });
+      while (spawnBudget >= 14) {
+        spawnBudget -= 14;
+        spawnTrail(x, y);
       }
     }
 
     function onClick(event: MouseEvent) {
-      const x = event.clientX;
-      const y = event.clientY;
-
-      spawn(x, y, {
-        count: 36,
-        speed: [2.5, 7.5],
-        size: [12, 28],
-        life: [450, 900],
-        spread: 4,
-        radial: true,
-      });
-
-      spawn(x, y, {
-        count: 18,
-        speed: [1.2, 4.2],
-        size: [8, 18],
-        life: [350, 700],
-        spread: 18,
-      });
+      spawnRipple(event.clientX, event.clientY);
     }
 
     let lastTs = performance.now();
@@ -190,6 +209,7 @@ export default function PixelCursor() {
       if (!running) return;
       const dt = Math.min(32, ts - lastTs);
       lastTs = ts;
+      const step = dt / 16.67;
 
       ctx!.clearRect(0, 0, width, height);
       ctx!.fillStyle = color;
@@ -205,16 +225,16 @@ export default function PixelCursor() {
         }
 
         const t = p.life / p.maxLife;
-        const fade = t < 0.15 ? t / 0.15 : 1 - (t - 0.15) / 0.85;
-        const drag = 0.96;
-        p.vx *= drag;
-        p.vy *= drag;
-        p.x += p.vx * (dt / 16.67);
-        p.y += p.vy * (dt / 16.67);
-        p.rotation += p.spin * (dt / 16.67);
+        const fade = t < 0.08 ? t / 0.08 : 1 - (t - 0.08) / 0.92;
+
+        p.vx *= p.drag;
+        p.vy *= p.drag;
+        p.x += p.vx * step;
+        p.y += p.vy * step;
+        p.rotation += p.spin * step;
 
         ctx!.save();
-        ctx!.globalAlpha = Math.max(0, Math.min(1, fade));
+        ctx!.globalAlpha = Math.max(0, Math.min(1, fade)) * (p.drag === 1 ? 0.9 : 0.75);
         ctx!.translate(p.x, p.y);
         ctx!.rotate(p.rotation);
         ctx!.font = `${p.size}px ${p.font}`;
@@ -246,14 +266,9 @@ export default function PixelCursor() {
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("click", onClick);
       themeObserver.disconnect();
+      for (const id of timers) window.clearTimeout(id);
     };
   }, []);
 
-  return (
-    <canvas
-      ref={canvasRef}
-      className="pixel-cursor"
-      aria-hidden="true"
-    />
-  );
+  return <canvas ref={canvasRef} className="pixel-cursor" aria-hidden="true" />;
 }
