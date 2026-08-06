@@ -20,19 +20,23 @@
   box-sizing: border-box;
 }
 
+html {
+  min-height: 100%;
+  background-color: var(--background);
+}
+
 html,
 body {
-  min-height: 100%;
   margin: 0;
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
 }
 
 body {
+  min-height: 100dvh;
   font-family: var(--font-body);
   font-size: 14px;
   letter-spacing: 0;
-  transition: background-color 240ms ease, color 240ms ease;
 }
 
 ::selection {
