@@ -53,7 +53,7 @@ export default function Home() {
 
   return (
     <main>
-      <div className="site-head">
+      <header className="site-head fade-in">
         <h1>Nyxel</h1>
         <button
           className="theme-toggle"
@@ -64,9 +64,9 @@ export default function Home() {
           <span aria-hidden="true">{isDark ? "○" : "●"}</span>
           {isDark ? "Light" : "Dark"}
         </button>
-      </div>
+      </header>
 
-      <nav className="contacts" aria-label="Contact">
+      <nav className="contacts fade-in delay-1" aria-label="Contact">
         {contacts.map((contact) => (
           <a
             key={contact.label}
@@ -79,7 +79,7 @@ export default function Home() {
         ))}
       </nav>
 
-      <section aria-labelledby="projects-title">
+      <section className="projects fade-in delay-2" aria-labelledby="projects-title">
         <h2 id="projects-title">Projects</h2>
         <ul>
           {projects.map((project) => (
@@ -90,9 +90,13 @@ export default function Home() {
                 target={project.newTab ? "_blank" : undefined}
                 rel={project.newTab ? "noreferrer" : undefined}
               >
-                <small className="project-number">{project.number}</small>
-                <span>{project.name}</span>
-                <small className="project-description">{project.description}</small>
+                <div className="project-main">
+                  <div className="project-title-row">
+                    <small className="project-number">{project.number}</small>
+                    <span className="project-name">{project.name}</span>
+                  </div>
+                  <p className="project-description">{project.description}</p>
+                </div>
               </a>
               {project.sourceHref && (
                 <a
