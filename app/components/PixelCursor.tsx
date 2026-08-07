@@ -135,9 +135,9 @@ export default function PixelCursor() {
     }
 
     function expandClick(x: number, y: number) {
-      const maxRadius = 4;
-      const ringDelay = 38;
-      const life = 520;
+      const maxRadius = 8;
+      const ringDelay = 26;
+      const life = 280;
 
       for (let row = -maxRadius; row <= maxRadius; row += 1) {
         for (let col = -maxRadius; col <= maxRadius; col += 1) {
@@ -150,7 +150,7 @@ export default function PixelCursor() {
             lightCell(x + col * grid, y + row * grid, {
               force: true,
               maxLife: life,
-              peak: 1 - dist * 0.08,
+              peak: Math.max(0.55, 1 - dist * 0.04),
             });
           }, delay);
           timers.push(id);

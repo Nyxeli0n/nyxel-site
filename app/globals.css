@@ -72,13 +72,40 @@ main {
   min-height: 12.5rem;
 }
 
-h1 {
+h1,
+.scramble-title {
   margin: 0;
   font-family: var(--font-display);
   font-size: clamp(40px, 8vw, 56px);
   font-weight: 600;
   line-height: 1;
   letter-spacing: -0.03em;
+}
+
+.scramble-title {
+  display: inline-flex;
+  cursor: default;
+}
+
+.scramble-title__char {
+  display: inline-block;
+  min-width: 0.55em;
+  text-align: center;
+  transition: transform 120ms ease, opacity 120ms ease;
+}
+
+.scramble-title__char.is-scrambled {
+  font-size: 0.42em;
+  font-weight: 400;
+  letter-spacing: 0;
+  transform: translateY(0.12em);
+  opacity: 0.92;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scramble-title__char {
+    transition: none;
+  }
 }
 
 .theme-toggle {

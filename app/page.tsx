@@ -1,6 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
+import ScrambleTitle from "./components/ScrambleTitle";
 
 const contacts = [
   { label: "X", href: "https://x.com/nyxeli0n" },
@@ -54,7 +55,7 @@ export default function Home() {
   return (
     <main>
       <header className="site-head fade-in">
-        <h1>Nyxel</h1>
+        <ScrambleTitle />
         <button
           className="theme-toggle"
           type="button"
