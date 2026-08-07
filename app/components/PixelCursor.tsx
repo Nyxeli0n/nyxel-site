@@ -71,6 +71,7 @@ export default function PixelCursor() {
     if (!ctx) return;
 
     const cells = new Map<string, Cell>();
+    const timers: number[] = [];
     let fonts = resolveFonts();
     let color = themeColor();
     let width = 0;
@@ -81,7 +82,7 @@ export default function PixelCursor() {
     let lastY = 0;
     let hasLast = false;
     let running = true;
-    const grid = 12;
+    const grid = 8;
 
     function resize() {
       dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -99,11 +100,16 @@ export default function PixelCursor() {
       color = themeColor();
     }
 
-    function lightCell(x: number, y: number, force = false) {
+    function lightCell(
+      x: number,
+      y: number,
+      opts?: { force?: boolean; maxLife?: number; peak?: number },
+    ) {
       const gx = snap(x, grid);
       const gy = snap(y, grid);
       const key = `${gx}:${gy}`;
       const existing = cells.get(key);
+      const force = opts?.force ?? false;
 
       if (existing && !force) {
         existing.life = Math.min(existing.life, existing.maxLife * 0.15);
@@ -120,19 +126,34 @@ export default function PixelCursor() {
         x: gx,
         y: gy,
         life: 0,
-        maxLife: rand(420, 780),
-        size: 11,
+        maxLife: opts?.maxLife ?? rand(420, 780),
+        size: 7,
         glyph: pickChar(),
         font: pick(fonts),
-        peak: rand(0.75, 1),
+        peak: opts?.peak ?? rand(0.75, 1),
       });
     }
 
-    function stampBrush(x: number, y: number, radius: number) {
-      for (let row = -radius; row <= radius; row += 1) {
-        for (let col = -radius; col <= radius; col += 1) {
-          if (col * col + row * row > radius * radius + 0.5) continue;
-          lightCell(x + col * grid, y + row * grid, true);
+    function expandClick(x: number, y: number) {
+      const maxRadius = 4;
+      const ringDelay = 38;
+      const life = 520;
+
+      for (let row = -maxRadius; row <= maxRadius; row += 1) {
+        for (let col = -maxRadius; col <= maxRadius; col += 1) {
+          const dist = Math.hypot(col, row);
+          if (dist > maxRadius + 0.2) continue;
+
+          const delay = Math.round(dist * ringDelay);
+          const id = window.setTimeout(() => {
+            if (!running) return;
+            lightCell(x + col * grid, y + row * grid, {
+              force: true,
+              maxLife: life,
+              peak: 1 - dist * 0.08,
+            });
+          }, delay);
+          timers.push(id);
         }
       }
     }
@@ -170,7 +191,7 @@ export default function PixelCursor() {
     }
 
     function onClick(event: MouseEvent) {
-      stampBrush(event.clientX, event.clientY, 2);
+      expandClick(event.clientX, event.clientY);
     }
 
     let lastTs = performance.now();
@@ -203,10 +224,6 @@ export default function PixelCursor() {
         const alpha = Math.max(0, Math.min(1, envelope * c.peak));
 
         ctx!.save();
-        ctx!.globalAlpha = alpha * 0.16;
-        ctx!.fillStyle = color;
-        ctx!.fillRect(c.x - grid / 2, c.y - grid / 2, grid, grid);
-
         ctx!.globalAlpha = alpha;
         ctx!.fillStyle = color;
         ctx!.font = `${c.size}px ${c.font}`;
@@ -238,6 +255,7 @@ export default function PixelCursor() {
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("click", onClick);
       themeObserver.disconnect();
+      for (const id of timers) window.clearTimeout(id);
     };
   }, []);
 
