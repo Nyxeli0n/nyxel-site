@@ -82,6 +82,7 @@ export default function PixelCursor() {
     let lastY = 0;
     let hasLast = false;
     let running = true;
+    let paused = false;
     const grid = 8;
 
     function resize() {
@@ -159,6 +160,11 @@ export default function PixelCursor() {
     }
 
     function onMove(event: PointerEvent) {
+      if (paused) {
+        hasLast = false;
+        return;
+      }
+
       const x = event.clientX;
       const y = event.clientY;
 
@@ -191,7 +197,17 @@ export default function PixelCursor() {
     }
 
     function onClick(event: MouseEvent) {
+      if (paused) return;
       expandClick(event.clientX, event.clientY);
+    }
+
+    function onCursorFx(event: Event) {
+      const detail = (event as CustomEvent<{ paused?: boolean }>).detail;
+      paused = Boolean(detail?.paused);
+      if (paused) {
+        cells.clear();
+        hasLast = false;
+      }
     }
 
     let lastTs = performance.now();
@@ -203,6 +219,12 @@ export default function PixelCursor() {
       const step = dt / 16.67;
 
       ctx!.clearRect(0, 0, width, height);
+      if (paused) {
+        cells.clear();
+        raf = window.requestAnimationFrame(tick);
+        return;
+      }
+
       ctx!.textAlign = "center";
       ctx!.textBaseline = "middle";
 
@@ -246,6 +268,7 @@ export default function PixelCursor() {
     window.addEventListener("resize", resize);
     window.addEventListener("pointermove", onMove, { passive: true });
     window.addEventListener("click", onClick);
+    window.addEventListener("nyxel-cursor-fx", onCursorFx);
     raf = window.requestAnimationFrame(tick);
 
     return () => {
@@ -254,6 +277,7 @@ export default function PixelCursor() {
       window.removeEventListener("resize", resize);
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("click", onClick);
+      window.removeEventListener("nyxel-cursor-fx", onCursorFx);
       themeObserver.disconnect();
       for (const id of timers) window.clearTimeout(id);
     };
