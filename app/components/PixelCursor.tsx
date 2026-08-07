@@ -10,26 +10,27 @@ const FONT_VARS = [
   "--font-pixel-line",
 ] as const;
 
-const TRAIL_GLYPHS = ["·", "+", "x", "o", "n"] as const;
-const RIPPLE_GLYPHS = ["·", "+", "o", "x", "i", "n", "a"] as const;
+const GLYPHS =
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+#*=%@" as const;
 
-type Particle = {
+type Cell = {
+  key: string;
   x: number;
   y: number;
-  vx: number;
-  vy: number;
   life: number;
   maxLife: number;
   size: number;
   glyph: string;
   font: string;
-  drag: number;
-  spin: number;
-  rotation: number;
+  peak: number;
 };
 
 function rand(min: number, max: number) {
   return min + Math.random() * (max - min);
+}
+
+function pickChar() {
+  return GLYPHS[Math.floor(Math.random() * GLYPHS.length)]!;
 }
 
 function pick<T>(items: readonly T[]) {
@@ -51,6 +52,10 @@ function themeColor() {
   return readCssVar("--foreground") || "#fff";
 }
 
+function snap(value: number, grid: number) {
+  return Math.round(value / grid) * grid;
+}
+
 export default function PixelCursor() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -65,7 +70,7 @@ export default function PixelCursor() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const particles: Particle[] = [];
+    const cells = new Map<string, Cell>();
     let fonts = resolveFonts();
     let color = themeColor();
     let width = 0;
@@ -75,9 +80,8 @@ export default function PixelCursor() {
     let lastX = 0;
     let lastY = 0;
     let hasLast = false;
-    let spawnBudget = 0;
     let running = true;
-    const maxParticles = 520;
+    const grid = 12;
 
     function resize() {
       dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -95,75 +99,42 @@ export default function PixelCursor() {
       color = themeColor();
     }
 
-    function pushParticle(p: Particle) {
-      if (particles.length >= maxParticles) particles.shift();
-      particles.push(p);
-    }
+    function lightCell(x: number, y: number, force = false) {
+      const gx = snap(x, grid);
+      const gy = snap(y, grid);
+      const key = `${gx}:${gy}`;
+      const existing = cells.get(key);
 
-    function spawnTrail(x: number, y: number) {
-      const count = Math.random() > 0.5 ? 2 : 1;
-      for (let i = 0; i < count; i += 1) {
-        const angle = rand(0, Math.PI * 2);
-        const speed = rand(0.2, 1.1);
-        pushParticle({
-          x: x + rand(-4, 4),
-          y: y + rand(-4, 4),
-          vx: Math.cos(angle) * speed,
-          vy: Math.sin(angle) * speed,
-          life: 0,
-          maxLife: rand(220, 420),
-          size: pick([6, 7, 8] as const),
-          glyph: pick(TRAIL_GLYPHS),
-          font: pick(fonts),
-          drag: 0.94,
-          spin: rand(-0.08, 0.08),
-          rotation: 0,
-        });
+      if (existing && !force) {
+        existing.life = Math.min(existing.life, existing.maxLife * 0.15);
+        existing.peak = Math.min(1, existing.peak + 0.25);
+        if (Math.random() > 0.55) {
+          existing.glyph = pickChar();
+          existing.font = pick(fonts);
+        }
+        return;
       }
-    }
 
-    function spawnRing(
-      x: number,
-      y: number,
-      opts: {
-        count: number;
-        speed: number;
-        size: number;
-        life: number;
-        jitter?: number;
-        phase?: number;
-      },
-    ) {
-      const jitter = opts.jitter ?? 0.02;
-      const phase = opts.phase ?? 0;
-      for (let i = 0; i < opts.count; i += 1) {
-        const angle = phase + (Math.PI * 2 * i) / opts.count + rand(-jitter, jitter);
-        const speed = opts.speed * rand(0.97, 1.03);
-        pushParticle({
-          x,
-          y,
-          vx: Math.cos(angle) * speed,
-          vy: Math.sin(angle) * speed,
-          life: 0,
-          maxLife: opts.life * rand(0.92, 1.08),
-          size: opts.size,
-          glyph: pick(RIPPLE_GLYPHS),
-          font: pick(fonts),
-          drag: 1,
-          spin: 0,
-          rotation: angle,
-        });
-      }
-    }
-
-    function spawnRipple(x: number, y: number) {
-      spawnRing(x, y, {
-        count: 48,
-        speed: 1.35,
-        size: 6,
-        life: 420,
-        jitter: 0.015,
+      cells.set(key, {
+        key,
+        x: gx,
+        y: gy,
+        life: 0,
+        maxLife: rand(420, 780),
+        size: 11,
+        glyph: pickChar(),
+        font: pick(fonts),
+        peak: rand(0.75, 1),
       });
+    }
+
+    function stampBrush(x: number, y: number, radius: number) {
+      for (let row = -radius; row <= radius; row += 1) {
+        for (let col = -radius; col <= radius; col += 1) {
+          if (col * col + row * row > radius * radius + 0.5) continue;
+          lightCell(x + col * grid, y + row * grid, true);
+        }
+      }
     }
 
     function onMove(event: PointerEvent) {
@@ -174,24 +145,32 @@ export default function PixelCursor() {
         lastX = x;
         lastY = y;
         hasLast = true;
+        lightCell(x, y);
         return;
       }
 
-      const dist = Math.hypot(x - lastX, y - lastY);
-      if (dist < 7) return;
+      const dx = x - lastX;
+      const dy = y - lastY;
+      const dist = Math.hypot(dx, dy);
+      if (dist < 2) return;
 
-      spawnBudget += dist;
+      const steps = Math.max(1, Math.ceil(dist / (grid * 0.55)));
+      for (let i = 1; i <= steps; i += 1) {
+        const t = i / steps;
+        const px = lastX + dx * t;
+        const py = lastY + dy * t;
+        lightCell(px, py);
+        if (Math.random() > 0.7) {
+          lightCell(px + pick([-grid, 0, grid] as const), py + pick([-grid, 0, grid] as const));
+        }
+      }
+
       lastX = x;
       lastY = y;
-
-      while (spawnBudget >= 14) {
-        spawnBudget -= 14;
-        spawnTrail(x, y);
-      }
     }
 
     function onClick(event: MouseEvent) {
-      spawnRipple(event.clientX, event.clientY);
+      stampBrush(event.clientX, event.clientY, 2);
     }
 
     let lastTs = performance.now();
@@ -203,33 +182,35 @@ export default function PixelCursor() {
       const step = dt / 16.67;
 
       ctx!.clearRect(0, 0, width, height);
-      ctx!.fillStyle = color;
       ctx!.textAlign = "center";
       ctx!.textBaseline = "middle";
 
-      for (let i = particles.length - 1; i >= 0; i -= 1) {
-        const p = particles[i]!;
-        p.life += dt;
-        if (p.life >= p.maxLife) {
-          particles.splice(i, 1);
+      for (const [key, c] of cells) {
+        c.life += dt;
+        if (c.life >= c.maxLife) {
+          cells.delete(key);
           continue;
         }
 
-        const t = p.life / p.maxLife;
-        const fade = t < 0.08 ? t / 0.08 : 1 - (t - 0.08) / 0.92;
+        if (Math.random() < 0.045 * step) {
+          c.glyph = pickChar();
+          c.font = pick(fonts);
+        }
 
-        p.vx *= p.drag;
-        p.vy *= p.drag;
-        p.x += p.vx * step;
-        p.y += p.vy * step;
-        p.rotation += p.spin * step;
+        const t = c.life / c.maxLife;
+        const envelope =
+          t < 0.1 ? t / 0.1 : t > 0.55 ? 1 - (t - 0.55) / 0.45 : 1;
+        const alpha = Math.max(0, Math.min(1, envelope * c.peak));
 
         ctx!.save();
-        ctx!.globalAlpha = Math.max(0, Math.min(1, fade)) * (p.drag === 1 ? 0.9 : 0.75);
-        ctx!.translate(p.x, p.y);
-        ctx!.rotate(p.rotation);
-        ctx!.font = `${p.size}px ${p.font}`;
-        ctx!.fillText(p.glyph, 0, 0);
+        ctx!.globalAlpha = alpha * 0.16;
+        ctx!.fillStyle = color;
+        ctx!.fillRect(c.x - grid / 2, c.y - grid / 2, grid, grid);
+
+        ctx!.globalAlpha = alpha;
+        ctx!.fillStyle = color;
+        ctx!.font = `${c.size}px ${c.font}`;
+        ctx!.fillText(c.glyph, c.x, c.y);
         ctx!.restore();
       }
 
