@@ -81,20 +81,6 @@ h1 {
   letter-spacing: -0.03em;
 }
 
-.scramble-title {
-  position: relative;
-  display: inline-block;
-  cursor: default;
-}
-
-.scramble-title__fx {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
 .theme-toggle {
   display: inline-flex;
   align-items: center;
