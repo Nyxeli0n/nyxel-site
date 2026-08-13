@@ -38,18 +38,17 @@ const themeScript = `
   }
 `;
 
-const fontVars = [
-  geistSans.variable,
-  geistMono.variable,
-].join(" ");
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={fontVars} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${geistSans.variable} ${geistMono.variable}`}
+      suppressHydrationWarning
+    >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>

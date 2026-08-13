@@ -126,10 +126,6 @@ ul {
 
 .project-card {
   position: relative;
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 24px;
   border-bottom: 1px solid var(--line);
   transition: border-color 0.3s ease;
 }
@@ -198,20 +194,6 @@ ul {
   line-height: 1.4;
 }
 
-.project-source {
-  flex-shrink: 0;
-  align-self: center;
-  color: var(--muted);
-  font-size: 13px;
-  white-space: nowrap;
-  transition: color 180ms ease;
-}
-
-.project-source:hover,
-.project-source:focus-visible {
-  color: var(--foreground);
-}
-
 a:focus-visible,
 button:focus-visible {
   outline: 1px solid var(--foreground);
@@ -242,10 +224,6 @@ button:focus-visible {
   animation-delay: 0.2s;
 }
 
-.delay-3 {
-  animation-delay: 0.3s;
-}
-
 @media (max-width: 560px) {
   main {
     width: min(100% - 24px, 700px);
@@ -255,16 +233,6 @@ button:focus-visible {
     min-height: 8rem;
   }
 
-  .project-card {
-    flex-wrap: wrap;
-    gap: 0;
-  }
-
-  .project-source {
-    width: 100%;
-    padding: 0 0 14px 30px;
-    align-self: flex-start;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -280,5 +248,4 @@ button:focus-visible {
     opacity: 1;
     transform: none;
   }
-
 }
