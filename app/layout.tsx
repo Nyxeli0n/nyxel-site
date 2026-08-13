@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import PixelCursor from "./components/PixelCursor";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -16,36 +15,6 @@ const geistMono = localFont({
   src: "./fonts/GeistMono-Variable.woff2",
   variable: "--font-geist-mono",
   weight: "100 900",
-  display: "swap",
-});
-
-const geistPixelSquare = localFont({
-  src: "./fonts/GeistPixel-Square.woff2",
-  variable: "--font-pixel-square",
-  display: "swap",
-});
-
-const geistPixelCircle = localFont({
-  src: "./fonts/GeistPixel-Circle.woff2",
-  variable: "--font-pixel-circle",
-  display: "swap",
-});
-
-const geistPixelGrid = localFont({
-  src: "./fonts/GeistPixel-Grid.woff2",
-  variable: "--font-pixel-grid",
-  display: "swap",
-});
-
-const geistPixelTriangle = localFont({
-  src: "./fonts/GeistPixel-Triangle.woff2",
-  variable: "--font-pixel-triangle",
-  display: "swap",
-});
-
-const geistPixelLine = localFont({
-  src: "./fonts/GeistPixel-Line.woff2",
-  variable: "--font-pixel-line",
   display: "swap",
 });
 
@@ -72,11 +41,6 @@ const themeScript = `
 const fontVars = [
   geistSans.variable,
   geistMono.variable,
-  geistPixelSquare.variable,
-  geistPixelCircle.variable,
-  geistPixelGrid.variable,
-  geistPixelTriangle.variable,
-  geistPixelLine.variable,
 ].join(" ");
 
 export default function RootLayout({
@@ -90,7 +54,6 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body>
-        <PixelCursor />
         {children}
         <Analytics />
         <SpeedInsights />
