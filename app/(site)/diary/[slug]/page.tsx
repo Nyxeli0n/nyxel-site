@@ -16,10 +16,24 @@ export default async function Page({ params }: Props) {
   const { diary } = await readContent();
   const entry = diary.find((item) => item.slug === slug);
   if (!entry) notFound();
-  return <>
-    <article className="prose"><h2>{entry.title}</h2><time dateTime={entry.date}>{entry.date}</time>
-      {entry.body?.length ? <RichText value={entry.body} /> : entry.paragraphs.map((text, i) => <p key={i}>{text}</p>)}
-    </article>
-    <ul className="back-link"><li className="project-card"><Link className="project-link" href="/diary">Diary</Link></li></ul>
-  </>;
+  return (
+    <>
+      <article className="prose">
+        <h2>{entry.title}</h2>
+        <time dateTime={entry.date}>{entry.date}</time>
+        {entry.body?.length ? (
+          <RichText value={entry.body} />
+        ) : (
+          entry.paragraphs.map((text, i) => <p key={i}>{text}</p>)
+        )}
+      </article>
+      <ul className="back-link">
+        <li className="project-card">
+          <Link className="project-link" href="/diary">
+            Diary
+          </Link>
+        </li>
+      </ul>
+    </>
+  );
 }

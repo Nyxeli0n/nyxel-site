@@ -22,15 +22,23 @@ export async function readProjects() {
         signal: AbortSignal.timeout(10_000),
       },
     );
-    if (!response.ok) throw new Error(`GitHub projects request failed (${response.status})`);
+    if (!response.ok)
+      throw new Error(`GitHub projects request failed (${response.status})`);
     const batch: Repository[] = await response.json();
     repositories.push(...batch);
     if (batch.length < 100) break;
   }
 
   const projects = repositories
-    .filter(repository => !repository.private && repository.owner.login.toLowerCase() === owner.toLowerCase())
-    .sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at) || b.id - a.id);
+    .filter(
+      (repository) =>
+        !repository.private &&
+        repository.owner.login.toLowerCase() === owner.toLowerCase(),
+    )
+    .sort(
+      (a, b) =>
+        Date.parse(b.created_at) - Date.parse(a.created_at) || b.id - a.id,
+    );
 
   return projects.map((repository, index) => ({
     name: repository.name,
