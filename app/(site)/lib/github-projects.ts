@@ -11,7 +11,6 @@ type Repository = {
 
 const owner = "Nyxeli0n";
 
-// Read public repositories without credentials so private projects cannot leak.
 export async function readProjects() {
   const repositories: Repository[] = [];
   for (let page = 1; ; page++) {

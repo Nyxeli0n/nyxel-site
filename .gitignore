@@ -1,14 +1,10 @@
-# dependencies
 /node_modules
 
-# next.js
 /.next/
 /out/
 
-# production
 /build
 
-# misc
 .DS_Store
 *.pem
 *.p12
@@ -16,15 +12,12 @@
 *.mobileprovision
 *.swp
 
-# debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# env
 .env*
 
-# Local editor content; never publish as source
 .data/
 .vercel

@@ -3,8 +3,6 @@ import MediaDialog from "./MediaDialog";
 import type { CSSProperties } from "react";
 import type { Favorite } from "../content";
 
-// Original implementation, visually informed by vercel.com/geist/book.
-// No Vercel component source or branding is included.
 export default function BookShelf({ books }: { books: Favorite[] }) {
   return <ul className="book-shelf" aria-label="Books">{books.map((book) => {
     const cover = <span className="book-object" style={{ aspectRatio: book.aspectRatio }} aria-hidden="true">
