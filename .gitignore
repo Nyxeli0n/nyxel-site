@@ -27,3 +27,4 @@ pnpm-debug.log*
 
 # Local editor content; never publish as source
 .data/
+.vercel

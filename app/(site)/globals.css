@@ -384,29 +384,14 @@ button:focus-visible {
   .media-layout { grid-template-columns: 1fr; gap: 40px; }
   .detail-cover { width: min(180px,100%); max-height: 270px; }
 }
-.editor { font-family: var(--font-display); }
-.editor button, .editor-login button { border: 1px solid var(--line); border-radius: 5px; background: var(--background); color: var(--foreground); padding: 8px 12px; font: inherit; font-size: 13px; cursor: pointer; }
-.editor button:disabled { opacity: .4; cursor: default; }
-.editor button[aria-pressed=true] { background: var(--foreground); color: var(--background); }
-.editor-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.editor-toolbar nav { display: flex; flex-wrap: wrap; gap: 6px; }
-.editor-status { color: var(--muted); font-size: 12px; min-height: 20px; margin: 16px 0 32px; }
-.editor-layout { display: flex; gap: 24px; align-items: start; }
-.editor-list { width: 170px; flex-shrink: 0; display: grid; gap: 8px; }
-.editor-list button { text-align: left; overflow-wrap: anywhere; }
-.editor-fields { flex: 1; min-width: 0; }
-.editor-field { display: grid; gap: 8px; margin-bottom: 24px; font-size: 13px; line-height: 1.6; }
-.editor-field input, .editor-field textarea, .editor-links input { width: 100%; border: 1px solid var(--line); border-radius: 5px; padding: 10px 12px; background: var(--background); color: var(--foreground); font: inherit; font-size: 14px; }
-.editor-field textarea { resize: vertical; line-height: 1.9; }
-.editor-links { margin: 0 0 24px; border: 1px solid var(--line); padding: 12px; font-size: 13px; }
-.editor-links > div { display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 16px; }
-.editor-delete { margin-top: 24px; }
-.editor-login { max-width: 360px; font-family: var(--font-display); }
-@media (max-width: 560px) { .editor-layout { flex-direction: column; } .editor-list { width: 100%; } .editor-fields { width: 100%; } }
-
 /* Geist for Latin; native Japanese sans-serif for missing glyphs. */
-.media-review, .detail-title, .detail-creator, .detail-summary, .detail-facts, .detail-links, .editor, .editor-login, .book-title {
+.media-review, .detail-title, .detail-creator, .detail-summary, .detail-facts, .detail-links, .book-title {
   font-family: var(--font-geist-sans), "Yu Gothic UI", "Hiragino Sans", sans-serif;
 }
-.editor-layout { border: 0; margin: 0; padding: 0; min-width: 0; }
-.editor-actions { display: flex; gap: 8px; }
+
+.media-review h2, .prose h2 { font-family: var(--font-display); font-size: 20px; margin: 32px 0 16px; }
+.media-review h3, .prose h3 { font-family: var(--font-display); font-size: 17px; margin: 28px 0 14px; }
+.media-review ul, .prose ul { list-style: disc; padding-left: 24px; margin: 0 0 24px; }
+.media-review ol, .prose ol { padding-left: 24px; margin: 0 0 24px; }
+.media-review a, .prose a { text-decoration: underline; text-underline-offset: 3px; }
+.media-review blockquote, .prose blockquote { margin: 24px 0; padding-left: 20px; border-left: 1px solid var(--line); color: var(--muted); }

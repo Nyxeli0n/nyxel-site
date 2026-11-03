@@ -2,6 +2,7 @@
 
 import * as Dialog from "@radix-ui/react-dialog";
 import Image from "next/image";
+import RichText from "./RichText";
 import type { Favorite } from "../content";
 
 export default function MediaDialog({ item, triggerClass, children, showLinks = true }: {
@@ -23,7 +24,7 @@ export default function MediaDialog({ item, triggerClass, children, showLinks = 
             {showLinks && links.length > 0 && <nav className="detail-links" aria-label="作品のリンク">{links.map((link, i) => <a href={link.href} target="_blank" rel="noreferrer" key={i}>{link.label} ↗</a>)}</nav>}
           </aside>
           <article className="media-review" aria-label="感想" lang="ja">
-            {item.review ? item.review.split(/\n\s*\n/).map((paragraph, i) => <p key={i}>{paragraph}</p>) : <p className="review-empty">感想はまだありません。</p>}
+            {item.reviewBlocks?.length ? <RichText value={item.reviewBlocks} /> : item.review ? item.review.split(/\n\s*\n/).map((paragraph, i) => <p key={i}>{paragraph}</p>) : <p className="review-empty">感想はまだありません。</p>}
           </article>
         </div>
       </Dialog.Content>
