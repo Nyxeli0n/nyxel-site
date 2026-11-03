@@ -68,16 +68,15 @@ export default function ContentEditor({ initial, revision: initialRevision, loca
           {field("題名", media.name, name => updateMedia({ name }))}
           {field("著者・監督", media.creator ?? "", creator => updateMedia({ creator }))}
           {field("表紙・ポスターのURL", media.cover ?? "", cover => updateMedia({ cover: cover || undefined }))}
-          {field("概要", media.summary ?? "", summary => updateMedia({ summary }), true)}
           {field("作品データ（1行にひとつ。「出版年: 2005」のように入力）", media.facts?.map(f => `${f.label}: ${f.value}`).join("\n") ?? "", value => updateMedia({ facts: value.split("\n").filter(Boolean).map(line => { const index = line.search(/[:：]/); return index < 0 ? { label: line, value: "" } : { label: line.slice(0,index).trim(), value: line.slice(index+1).trim() }; }) }), true)}
-          <fieldset className="editor-links"><legend>リンク</legend>
+          {section === "books" && <fieldset className="editor-links"><legend>リンク</legend>
             {(media.links ?? (media.href ? [{ label: "公式サイト", href: media.href }] : [])).map((link, i, links) => <div key={i}>
               <input aria-label={`リンク${i+1}の名前`} value={link.label} onChange={e => updateMedia({ links: links.map((l,j) => j === i ? {...l,label:e.target.value} : l) })} />
               <input aria-label={`リンク${i+1}のURL`} value={link.href} onChange={e => updateMedia({ links: links.map((l,j) => j === i ? {...l,href:e.target.value} : l) })} />
               <button aria-label={`リンク${i+1}を削除`} onClick={() => updateMedia({ links: links.filter((_,j) => j !== i) })}>×</button>
             </div>)}
             <button onClick={() => updateMedia({ links: [...(media.links ?? (media.href ? [{ label: "公式サイト", href: media.href }] : [])), { label: "Amazon", href: "https://www.amazon.co.jp/" }] })}>＋ リンク</button>
-          </fieldset>
+          </fieldset>}
           {field("自分の感想", media.review ?? "", review => updateMedia({ review }), true, true)}
         </>}
         {section === "diary" && data.diary[selected] && (() => {

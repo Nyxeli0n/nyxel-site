@@ -6,7 +6,7 @@ const favorite = z.object({
   name: z.string().min(1).max(300), creator: text.optional(), href: url.optional(),
   note: text.optional(), cover: url.optional(), color: z.string().regex(/^#[a-fA-F0-9]{3,8}$/).optional(),
   aspectRatio: z.string().regex(/^\d+(?:\.\d+)?\s*\/\s*\d+(?:\.\d+)?$/).optional(),
-  summary: text.optional(), review: text.optional(),
+  review: text.optional(),
   facts: z.array(z.object({ label: text, value: text })).max(50).optional(),
   links: z.array(z.object({ label: z.string().min(1), href: url })).max(20).optional(),
 });

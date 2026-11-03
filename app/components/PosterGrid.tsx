@@ -11,7 +11,7 @@ export default function PosterGrid({ movies }: { movies: Favorite[] }) {
       <span className="poster-title">{movie.name}</span>
     </>;
     return <li key={movie.name}>
-      <MediaDialog item={movie} triggerClass="poster">{poster}</MediaDialog>
+      <MediaDialog item={movie} triggerClass="poster" showLinks={false}>{poster}</MediaDialog>
       {movie.note && <p className="media-note">{movie.note}</p>}
     </li>;
   })}</ul>;
