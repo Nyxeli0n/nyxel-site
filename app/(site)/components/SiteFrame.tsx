@@ -6,7 +6,7 @@ import { useLayoutEffect, useRef } from "react";
 import ThemeToggle from "./ThemeToggle";
 
 const pages = [
-  { href: "/about", title: "About" },
+  { href: "/", title: "About" },
   { href: "/projects", title: "Projects" },
   { href: "/books", title: "Books" },
   { href: "/movies", title: "Movies" },
@@ -44,9 +44,8 @@ export default function SiteFrame({ children }: { children: React.ReactNode }) {
   }, [activePage?.href]);
 
   return <main>
-    <header className="site-head fade-in"><h1>Nyxel</h1><ThemeToggle /></header>
+    <header className="site-head fade-in"><h1><Link href="/">Nyxel</Link></h1><ThemeToggle /></header>
     <nav className="contacts fade-in delay-1" aria-label="Navigation">
-      <Link href="/">Home</Link>
       <a href="https://x.com/nyxeli0n" target="_blank" rel="noreferrer">X</a>
       <a href="https://github.com/Nyxeli0n" target="_blank" rel="noreferrer">GitHub</a>
     </nav>
