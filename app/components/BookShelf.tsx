@@ -7,7 +7,7 @@ import type { Favorite } from "../content";
 // No Vercel component source or branding is included.
 export default function BookShelf({ books }: { books: Favorite[] }) {
   return <ul className="book-shelf" aria-label="Books">{books.map((book) => {
-    const cover = <span className="book-object" aria-hidden="true">
+    const cover = <span className="book-object" style={{ aspectRatio: book.aspectRatio }} aria-hidden="true">
       <span className="book-pages" />
       <span className="book-cover" style={{ "--book-color": book.color ?? "#292929" } as CSSProperties}>
         {book.cover ? <Image className="book-art" src={book.cover} alt="" width={480} height={640} unoptimized /> : <>
@@ -20,7 +20,7 @@ export default function BookShelf({ books }: { books: Favorite[] }) {
     return <li className="book-item" key={book.name}>
       {book.href ? <Link className="book-hit" href={book.href} aria-label={book.name}
         target={book.href.startsWith("https://") ? "_blank" : undefined}
-        rel={book.href.startsWith("https://") ? "noreferrer" : undefined}>{cover}</Link>
+        rel={book.href.startsWith("https://") ? "noreferrer" : undefined}>{cover}<span className="book-title" lang="ja">{book.name}</span></Link>
         : <div className="book-hit" role="img" aria-label={book.creator ? `${book.name}, ${book.creator}` : book.name}>{cover}</div>}
       {book.note && <p className="media-note">{book.note}</p>}
     </li>;
