@@ -44,7 +44,7 @@ export default function SiteFrame({ children }: { children: React.ReactNode }) {
   }, [activePage?.href]);
 
   return <main>
-    <header className="site-head fade-in"><h1>{activePage?.title ?? "Nyxel"}</h1><ThemeToggle /></header>
+    <header className="site-head fade-in"><h1>Nyxel</h1><ThemeToggle /></header>
     <nav className="contacts fade-in delay-1" aria-label="Navigation">
       <Link href="/">Home</Link>
       <a href="https://x.com/nyxeli0n" target="_blank" rel="noreferrer">X</a>
