@@ -2,15 +2,18 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import SitePage from "../../components/SitePage";
-import { diary } from "../../content";
+import { readContent } from "../../lib/content-store";
+export const dynamic = "force-dynamic";
 type Props = { params: Promise<{ slug: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
+  const { diary } = await readContent();
   const entry = diary.find((item) => item.slug === slug);
   return { title: entry ? `${entry.title} | Nyxel` : "Nyxel" };
 }
 export default async function Page({ params }: Props) {
   const { slug } = await params;
+  const { diary } = await readContent();
   const entry = diary.find((item) => item.slug === slug);
   if (!entry) notFound();
   return <SitePage title="Diary">

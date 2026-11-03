@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import SitePage from "../components/SitePage";
 import PosterGrid from "../components/PosterGrid";
-import { movies } from "../content";
+import { readContent } from "../lib/content-store";
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = { title: "Movies | Nyxel" };
-export default function Page() {
+export default async function Page() {
+  const { movies } = await readContent();
   return <SitePage title="Movies"><PosterGrid movies={movies} /></SitePage>;
 }

@@ -352,3 +352,61 @@ button:focus-visible {
   .book-hit:hover .book-object, .book-hit:focus-visible .book-object { transform: rotateY(-22deg); }
   .poster:hover .poster-frame { transform: none; }
 }
+
+.media-trigger { width: 100%; background: transparent; color: inherit; border: 0; font: inherit; text-align: left; cursor: pointer; }
+.media-trigger.poster { padding: 0; }
+.media-overlay { position: fixed; inset: 0; z-index: 40; background: #000a; backdrop-filter: blur(8px); animation: overlay-in 180ms ease; }
+.media-dialog {
+  position: fixed; z-index: 41; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: min(1120px, calc(100vw - 64px)); max-height: calc(100dvh - 64px); overflow-y: auto;
+  background: var(--background); color: var(--foreground); border: 1px solid var(--line); border-radius: 12px;
+  box-shadow: 0 24px 100px #0006; padding: 56px; animation: dialog-in 220ms cubic-bezier(.22,1,.36,1);
+}
+.dialog-close { position: absolute; right: 18px; top: 14px; width: 32px; height: 32px; border: 0; background: transparent; color: var(--muted); font: inherit; font-size: 25px; cursor: pointer; }
+.dialog-close:hover { color: var(--foreground); }
+.media-layout { display: grid; grid-template-columns: minmax(0, 270px) minmax(0,1fr); gap: 64px; }
+.detail-cover { display: block; width: 100%; height: auto; max-height: 400px; object-fit: contain; object-position: left; }
+.detail-title { margin: 24px 0 8px; font-family: var(--font-display); font-size: 18px; line-height: 1.6; font-weight: 600; }
+.detail-creator, .detail-summary, .detail-facts, .detail-links { font-family: var(--font-display); color: var(--muted); font-size: 13px; line-height: 1.9; }
+.detail-summary { white-space: pre-line; margin: 24px 0; }
+.detail-facts { margin: 24px 0; }
+.detail-facts > div { display: grid; grid-template-columns: 80px 1fr; gap: 12px; padding: 5px 0; }
+.detail-facts dd { margin: 0; color: var(--foreground); overflow-wrap: anywhere; }
+.detail-links { display: flex; flex-wrap: wrap; gap: 12px 24px; margin-top: 24px; }
+.detail-links a:hover { color: var(--foreground); }
+.media-review { min-width: 0; font-family: var(--font-display); font-size: 15px; line-height: 2.1; overflow-wrap: anywhere; }
+.media-review p { white-space: pre-wrap; margin: 0 0 1.8em; }
+.review-empty { color: var(--muted); font-size: 13px; }
+@keyframes overlay-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes dialog-in { from { opacity: 0; transform: translate(-50%, calc(-50% + 8px)) scale(.99); } to { opacity: 1; transform: translate(-50%,-50%) scale(1); } }
+@media (max-width: 700px) {
+  .media-dialog { width: calc(100vw - 24px); max-height: calc(100dvh - 24px); padding: 48px 24px 24px; }
+  .media-layout { grid-template-columns: 1fr; gap: 40px; }
+  .detail-cover { width: min(180px,100%); max-height: 270px; }
+}
+.editor { font-family: var(--font-display); }
+.editor button, .editor-login button { border: 1px solid var(--line); border-radius: 5px; background: var(--background); color: var(--foreground); padding: 8px 12px; font: inherit; font-size: 13px; cursor: pointer; }
+.editor button:disabled { opacity: .4; cursor: default; }
+.editor button[aria-pressed=true] { background: var(--foreground); color: var(--background); }
+.editor-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.editor-toolbar nav { display: flex; flex-wrap: wrap; gap: 6px; }
+.editor-status { color: var(--muted); font-size: 12px; min-height: 20px; margin: 16px 0 32px; }
+.editor-layout { display: flex; gap: 24px; align-items: start; }
+.editor-list { width: 170px; flex-shrink: 0; display: grid; gap: 8px; }
+.editor-list button { text-align: left; overflow-wrap: anywhere; }
+.editor-fields { flex: 1; min-width: 0; }
+.editor-field { display: grid; gap: 8px; margin-bottom: 24px; font-size: 13px; line-height: 1.6; }
+.editor-field input, .editor-field textarea, .editor-links input { width: 100%; border: 1px solid var(--line); border-radius: 5px; padding: 10px 12px; background: var(--background); color: var(--foreground); font: inherit; font-size: 14px; }
+.editor-field textarea { resize: vertical; line-height: 1.9; }
+.editor-links { margin: 0 0 24px; border: 1px solid var(--line); padding: 12px; font-size: 13px; }
+.editor-links > div { display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 16px; }
+.editor-delete { margin-top: 24px; }
+.editor-login { max-width: 360px; font-family: var(--font-display); }
+@media (max-width: 560px) { .editor-layout { flex-direction: column; } .editor-list { width: 100%; } .editor-fields { width: 100%; } }
+
+/* Geist for Latin; native Japanese sans-serif for missing glyphs. */
+.media-review, .detail-title, .detail-creator, .detail-summary, .detail-facts, .detail-links, .editor, .editor-login, .book-title {
+  font-family: var(--font-geist-sans), "Yu Gothic UI", "Hiragino Sans", sans-serif;
+}
+.editor-layout { border: 0; margin: 0; padding: 0; min-width: 0; }
+.editor-actions { display: flex; gap: 8px; }

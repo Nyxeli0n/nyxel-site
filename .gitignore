@@ -24,3 +24,6 @@ pnpm-debug.log*
 
 # env
 .env*
+
+# Local editor content; never publish as source
+.data/

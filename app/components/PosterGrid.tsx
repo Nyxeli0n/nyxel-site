@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import MediaDialog from "./MediaDialog";
 import type { Favorite } from "../content";
 
 export default function PosterGrid({ movies }: { movies: Favorite[] }) {
@@ -11,10 +11,7 @@ export default function PosterGrid({ movies }: { movies: Favorite[] }) {
       <span className="poster-title">{movie.name}</span>
     </>;
     return <li key={movie.name}>
-      {movie.href ? <Link className="poster" href={movie.href}
-        target={movie.href.startsWith("https://") ? "_blank" : undefined}
-        rel={movie.href.startsWith("https://") ? "noreferrer" : undefined}>{poster}</Link>
-        : <div className="poster">{poster}</div>}
+      <MediaDialog item={movie} triggerClass="poster">{poster}</MediaDialog>
       {movie.note && <p className="media-note">{movie.note}</p>}
     </li>;
   })}</ul>;

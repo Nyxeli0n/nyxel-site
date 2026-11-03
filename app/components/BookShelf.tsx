@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import MediaDialog from "./MediaDialog";
 import type { CSSProperties } from "react";
 import type { Favorite } from "../content";
 
@@ -18,10 +18,7 @@ export default function BookShelf({ books }: { books: Favorite[] }) {
       </span>
     </span>;
     return <li className="book-item" key={book.name}>
-      {book.href ? <Link className="book-hit" href={book.href} aria-label={book.name}
-        target={book.href.startsWith("https://") ? "_blank" : undefined}
-        rel={book.href.startsWith("https://") ? "noreferrer" : undefined}>{cover}<span className="book-title" lang="ja">{book.name}</span></Link>
-        : <div className="book-hit" role="img" aria-label={book.creator ? `${book.name}, ${book.creator}` : book.name}>{cover}</div>}
+      <MediaDialog item={book} triggerClass="book-hit">{cover}<span className="book-title" lang="ja">{book.name}</span></MediaDialog>
       {book.note && <p className="media-note">{book.note}</p>}
     </li>;
   })}</ul>;
