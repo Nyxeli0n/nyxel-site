@@ -249,3 +249,22 @@ button:focus-visible {
     transform: none;
   }
 }
+
+/* Text pages reuse the existing type, spacing, and colors. */
+.entry-description { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.4; }
+.prose { line-height: 1.8; overflow-wrap: anywhere; }
+.prose p { margin: 0 0 24px; }
+.prose time { display: block; color: var(--muted); margin-bottom: 24px; }
+.intro { margin-bottom: 32px; }
+.back-link { margin-top: 48px; }
+.contacts a { position: relative; }
+.contacts a::after {
+  content: ""; position: absolute; left: 0; bottom: -5px; width: 0; height: 2px;
+  background: var(--foreground); transition: width 0.3s ease-out; pointer-events: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .contacts a:hover::after, .contacts a:focus-visible::after { width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .contacts a::after { transition: none; }
+}
