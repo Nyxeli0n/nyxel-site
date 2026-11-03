@@ -7,7 +7,7 @@ export const movies: Favorite[] = [
 export type DiaryEntry = { slug: string; date: string; title: string; paragraphs: string[] };
 export const diary: DiaryEntry[] = [];
 export const projects = [
-  { number: "03", name: "NEXT", description: "Apple Reminders, one task at a time", href: "https://github.com/Nyxeli0n/NEXT" },
-  { number: "02", name: "Infinite Life", description: "macOS cellular automaton wallpaper", href: "https://github.com/Nyxeli0n/InfiniteLife" },
-  { number: "01", name: "nyxelion.dev", description: "Personal website", href: "/" },
+  { name: "NEXT", description: "Apple Reminders, one task at a time", href: "https://github.com/Nyxeli0n/NEXT" },
+  { name: "Infinite Life", description: "macOS cellular automaton wallpaper", href: "https://github.com/Nyxeli0n/InfiniteLife" },
+  { name: "nyxelion.dev", description: "Personal website", href: "/" },
 ];
