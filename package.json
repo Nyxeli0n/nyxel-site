@@ -16,24 +16,30 @@
     "@sanity/locale-ja-jp": "^1.1.40",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
-    "next": "^16.2.12",
+    "next": "16.4.4",
     "next-sanity": "^13.4.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "sanity": "^6.22.0",
-    "sharp": "^0.35.0",
+    "sharp": "0.35.5",
     "styled-components": "^6.6.0"
   },
   "overrides": {
-    "postcss": "8.5.19",
-    "sharp": "$sharp"
+    "postcss": "8.5.32",
+    "sharp": "$sharp",
+    "js-yaml@^3.0.0": "3.15.2",
+    "minimatch@^10.0.0": "11.0.4",
+    "smol-toml": "1.9.1",
+    "undici@^7.0.0": "7.30.1",
+    "source-map-js": "1.2.2",
+    "brace-expansion@^4.0.0": "5.0.12"
   },
   "devDependencies": {
     "@types/node": "25.9.1",
     "@types/react": "19.2.15",
     "@types/react-dom": "19.2.3",
     "eslint": "9.39.4",
-    "eslint-config-next": "^16.2.12",
+    "eslint-config-next": "16.4.4",
     "typescript": "6.0.3"
   },
   "engines": {
