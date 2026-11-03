@@ -107,6 +107,28 @@ h1 {
   color: var(--foreground);
 }
 
+.page-navigation {
+  position: relative;
+  row-gap: 28px;
+}
+
+.page-navigation a[aria-current="page"] {
+  color: var(--foreground);
+}
+
+.page-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: var(--indicator-width, 0px);
+  background: var(--foreground);
+  opacity: var(--indicator-opacity, 0);
+  transform: translate(var(--indicator-x, 0px), var(--indicator-y, 0px));
+  transition: transform 350ms cubic-bezier(.22,1,.36,1), width 350ms cubic-bezier(.22,1,.36,1), opacity 150ms ease;
+  pointer-events: none;
+}
+
 .projects {
   margin: 0;
 }
