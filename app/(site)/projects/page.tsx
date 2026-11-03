@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import SitePage from "../components/SitePage";
 import EntryList from "../components/EntryList";
-import { readContent } from "../lib/content-store";
-export const dynamic = "force-dynamic";
+import { readProjects } from "../lib/github-projects";
+export const revalidate = 300;
 export const metadata: Metadata = { title: "Projects | Nyxel" };
-export default async function Page() { const { projects } = await readContent(); return <SitePage title="Projects"><EntryList label="Projects" entries={projects.map((project, index) => ({ ...project, number: String(index + 1).padStart(2, "0") }))} /></SitePage>; }
+export default async function Page() {
+  const projects = await readProjects();
+  return <SitePage title="Projects"><EntryList label="Projects" entries={projects} /></SitePage>;
+}

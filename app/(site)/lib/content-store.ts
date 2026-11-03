@@ -4,7 +4,7 @@ import type { Favorite, DiaryEntry } from "../content";
 import { cache } from "react";
 import { safeHttpsUrl, safeLink } from "./urls";
 
-export type SiteContent = { bio: string[]; books: Favorite[]; movies: Favorite[]; diary: DiaryEntry[]; projects: {name:string;description:string;href:string}[] };
+export type SiteContent = { bio: string[]; books: Favorite[]; movies: Favorite[]; diary: DiaryEntry[] };
 const client = createClient({
   projectId:process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!, dataset:process.env.NEXT_PUBLIC_SANITY_DATASET!,
   token:process.env.SANITY_API_READ_TOKEN, apiVersion:"2025-02-19", useCdn:false, perspective:"published",
@@ -15,15 +15,11 @@ export const readContent = cache(async (): Promise<SiteContent> => {
     "bio":coalesce(*[_id=="site-settings"][0].bio,[]),
     "books":*[_type=="book"]|order(order asc,_createdAt asc){${work}},
     "movies":*[_type=="movie"]|order(order asc,_createdAt asc){${work}},
-    "diary":*[_type=="diary"]|order(date desc){title,date,"slug":slug.current,body,"paragraphs":[]},
-    "projects":*[_type=="project"]|order(order asc,_createdAt asc){name,"description":coalesce(description,""),href}
+    "diary":*[_type=="diary"]|order(date desc){title,date,"slug":slug.current,body,"paragraphs":[]}
   }`, {}, {cache:"no-store"});
   const cleanWork = (item: Favorite): Favorite => ({...item, cover:safeHttpsUrl(item.cover), href:safeLink(item.href), links:item.links?.flatMap(link => {
     const href = safeHttpsUrl(link.href);
     return href ? [{...link,href}] : [];
   })});
-  return {...content,books:content.books.map(cleanWork),movies:content.movies.map(cleanWork),projects:content.projects.flatMap(project => {
-    const href = safeLink(project.href);
-    return href ? [{...project,href}] : [];
-  })};
+  return {...content,books:content.books.map(cleanWork),movies:content.movies.map(cleanWork)};
 });
