@@ -7,14 +7,10 @@ import type { Favorite } from "../content";
 
 export default function MediaDialog({
   item,
-  triggerClass,
   children,
-  showLinks = true,
 }: {
   item: Favorite;
-  triggerClass: string;
   children: React.ReactNode;
-  showLinks?: boolean;
 }) {
   const links =
     item.links ?? (item.href ? [{ label: "公式サイト", href: item.href }] : []);
@@ -22,7 +18,7 @@ export default function MediaDialog({
   return (
     <Dialog.Root>
       <Dialog.Trigger
-        className={`media-trigger ${triggerClass}`}
+        className="media-trigger"
         aria-label={`${item.name}を開く`}
       >
         {children}
@@ -57,7 +53,7 @@ export default function MediaDialog({
                   ))}
                 </dl>
               )}
-              {showLinks && links.length > 0 && (
+              {links.length > 0 && (
                 <nav className="detail-links" aria-label="作品のリンク">
                   {links.map((link, i) => (
                     <a
@@ -66,7 +62,7 @@ export default function MediaDialog({
                       rel="noreferrer"
                       key={i}
                     >
-                      {link.label} ↗
+                      {link.label}
                     </a>
                   ))}
                 </nav>
@@ -79,18 +75,21 @@ export default function MediaDialog({
                 aria-label={`5点満点中${rating}点`}
               >
                 <span aria-hidden="true">
-                  {"★".repeat(rating)}{"☆".repeat(5 - rating)}
+                  {"★".repeat(rating)}
+                  {"☆".repeat(5 - rating)}
                 </span>
               </div>
-              {item.reviewBlocks?.length ? (
-                <RichText value={item.reviewBlocks} />
-              ) : item.review ? (
-                item.review
-                  .split(/\n\s*\n/)
-                  .map((paragraph, i) => <p key={i}>{paragraph}</p>)
-              ) : (
-                <p className="review-empty">感想はまだありません。</p>
-              )}
+              <div className="prose">
+                {item.reviewBlocks?.length ? (
+                  <RichText value={item.reviewBlocks} />
+                ) : item.review ? (
+                  item.review
+                    .split(/\n\s*\n/)
+                    .map((paragraph, i) => <p key={i}>{paragraph}</p>)
+                ) : (
+                  <p className="empty-state">感想はまだありません。</p>
+                )}
+              </div>
             </article>
           </div>
         </Dialog.Content>

@@ -18,14 +18,18 @@ export default async function Page({ params }: Props) {
   if (!entry) notFound();
   return (
     <>
-      <article className="prose">
-        <h2>{entry.title}</h2>
-        <time dateTime={entry.date}>{entry.date}</time>
-        {entry.body?.length ? (
-          <RichText value={entry.body} />
-        ) : (
-          entry.paragraphs.map((text, i) => <p key={i}>{text}</p>)
-        )}
+      <article>
+        <header className="article-header">
+          <h2 className="article-title">{entry.title}</h2>
+          <time dateTime={entry.date}>{entry.date}</time>
+        </header>
+        <div className="prose">
+          {entry.body?.length ? (
+            <RichText value={entry.body} />
+          ) : (
+            entry.paragraphs.map((text, i) => <p key={i}>{text}</p>)
+          )}
+        </div>
       </article>
       <ul className="back-link">
         <li className="project-card">

@@ -15,50 +15,33 @@ const pages = [
 
 export default function SiteFrame({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const activePage = pages.find(
-    (page) => pathname === page.href || pathname.startsWith(`${page.href}/`),
-  );
   const navigation = useRef<HTMLElement>(null);
-
-  function moveIndicator(href?: string) {
-    const nav = navigation.current;
-    if (!nav) return;
-    const link = href
-      ? nav.querySelector<HTMLAnchorElement>(`a[href="${href}"]`)
-      : null;
-    nav.style.setProperty("--indicator-opacity", link ? "1" : "0");
-    if (link) {
-      const bounds = link.getBoundingClientRect();
-      const origin = nav.getBoundingClientRect();
-      nav.style.setProperty("--indicator-x", `${bounds.left - origin.left}px`);
-      nav.style.setProperty(
-        "--indicator-y",
-        `${bounds.bottom - origin.top + 8}px`,
-      );
-      nav.style.setProperty("--indicator-width", `${bounds.width}px`);
-    }
-  }
-
   useLayoutEffect(() => {
     const nav = navigation.current;
-    if (!nav) return;
-    const update = () => moveIndicator(activePage?.href);
-    update();
-    const observer = new ResizeObserver(update);
-    observer.observe(nav);
-    nav.querySelectorAll("a").forEach((link) => observer.observe(link));
-    return () => observer.disconnect();
-  }, [activePage?.href]);
+    const active = nav?.querySelector<HTMLAnchorElement>(
+      '[aria-current="page"]',
+    );
+    if (!nav || !active) return;
+    // Scroll only the menu, preserving the document's position.
+    const left = active.offsetLeft;
+    if (left < nav.scrollLeft) nav.scrollLeft = left;
+    else if (left + active.offsetWidth > nav.scrollLeft + nav.clientWidth)
+      nav.scrollLeft = left + active.offsetWidth - nav.clientWidth;
+  }, [pathname]);
 
   return (
     <main>
       <header className="site-head fade-in">
-        <h1>
+        <h1 className="site-title" lang="en">
           <Link href="/">Nyxel</Link>
         </h1>
         <ThemeToggle />
       </header>
-      <nav className="contacts fade-in delay-1" aria-label="Navigation">
+      <nav
+        className="contacts fade-in delay-1"
+        aria-label="外部リンク"
+        lang="en"
+      >
         <a href="https://x.com/nyxeli0n" target="_blank" rel="noreferrer">
           X
         </a>
@@ -68,20 +51,23 @@ export default function SiteFrame({ children }: { children: React.ReactNode }) {
       </nav>
       <nav
         ref={navigation}
-        className="contacts page-navigation fade-in delay-2"
-        aria-label="Pages"
+        className="page-navigation fade-in delay-2"
+        aria-label="ページ"
+        lang="en"
       >
         {pages.map((page) => (
           <Link
             key={page.href}
             href={page.href}
-            aria-current={activePage?.href === page.href ? "page" : undefined}
-            onNavigate={() => moveIndicator(page.href)}
+            aria-current={
+              pathname === page.href || pathname.startsWith(`${page.href}/`)
+                ? "page"
+                : undefined
+            }
           >
             {page.title}
           </Link>
         ))}
-        <span className="page-indicator" aria-hidden="true" />
       </nav>
       <div key={pathname} className="page-content fade-in">
         {children}

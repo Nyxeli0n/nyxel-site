@@ -5,5 +5,5 @@ export const revalidate = 300;
 export const metadata: Metadata = { title: "Projects | Nyxel" };
 export default async function Page() {
   const projects = await readProjects();
-  return <EntryList label="Projects" entries={projects} />;
+  return <EntryList variant="projects" label="Projects" entries={projects} />;
 }

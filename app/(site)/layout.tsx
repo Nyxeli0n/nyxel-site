@@ -19,6 +19,13 @@ const geistMono = localFont({
   display: "swap",
 });
 
+const geistSerif = localFont({
+  src: "./fonts/GeistSerif-Regular.woff2",
+  variable: "--font-geist-serif",
+  weight: "400",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Nyxel",
   description: "Nyxel",
@@ -46,8 +53,8 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable}`}
+      lang="ja"
+      className={`${geistSans.variable} ${geistMono.variable} ${geistSerif.variable}`}
       suppressHydrationWarning
     >
       <head>

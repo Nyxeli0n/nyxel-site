@@ -33,8 +33,8 @@ export default function ThemeToggle() {
       type="button"
       role="switch"
       aria-checked={isDark}
-      aria-label="Dark mode"
-      title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+      aria-label="ダークモード"
+      title={isDark ? "ライトモードに切り替える" : "ダークモードに切り替える"}
       onClick={toggleTheme}
     >
       <span className="theme-toggle-thumb" aria-hidden="true" />
