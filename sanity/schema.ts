@@ -150,7 +150,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   work("movie", "映画"),
   defineType({
     name: "diary",
-    title: "日記",
+    title: "Blog",
     type: "document",
     fields: [
       defineField({

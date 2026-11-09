@@ -20,7 +20,7 @@ export default defineConfig({
           .items([
             S.documentTypeListItem("book").title("本"),
             S.documentTypeListItem("movie").title("映画"),
-            S.documentTypeListItem("diary").title("日記"),
+            S.documentTypeListItem("diary").title("Blog"),
             S.listItem()
               .title("About")
               .child(
