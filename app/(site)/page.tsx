@@ -7,7 +7,7 @@ export default async function Home() {
   return (
     <div className="prose">
       {bio.map((text, index) => (
-        <p key={index}>{text}</p>
+        <p key={index} style={{ whiteSpace: "pre-wrap" }}>{text}</p>
       ))}
     </div>
   );
