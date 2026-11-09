@@ -312,6 +312,9 @@ button:focus-visible {
 .book-item {
   min-width: 0;
 }
+.book-shelf {
+  align-items: end;
+}
 .book-hit {
   display: block;
   perspective: 1200px;
@@ -397,6 +400,7 @@ button:focus-visible {
 }
 .book-title {
   display: block;
+  min-height: 3.4em;
   margin-top: 22px;
   color: var(--muted);
   font-size: 12px;
