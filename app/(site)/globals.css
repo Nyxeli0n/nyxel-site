@@ -73,21 +73,67 @@ h1 {
 }
 
 .theme-toggle {
-  display: inline-flex;
+  position: relative;
+  display: inline-grid;
+  grid-template-columns: repeat(2, 1fr);
   align-items: center;
-  gap: 8px;
-  padding: 0;
-  border: 0;
+  justify-items: center;
+  width: 80px;
+  height: 44px;
+  padding: 5px;
+  flex-shrink: 0;
+  border: 1px solid var(--line);
+  border-radius: 999px;
   background: transparent;
   color: var(--muted);
   cursor: pointer;
-  font: inherit;
-  font-size: 13px;
-  transition: color 180ms ease;
+  transition: border-color 180ms ease;
 }
 
 .theme-toggle:hover {
-  color: var(--foreground);
+  border-color: var(--foreground);
+}
+
+.theme-toggle-thumb {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--foreground);
+  transform: translateX(36px);
+  transition: transform 180ms ease;
+}
+
+.theme-toggle-icon {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+}
+
+.theme-toggle-moon {
+  color: var(--background);
+}
+
+:root[data-theme="light"] .theme-toggle-thumb {
+  transform: translateX(0);
+}
+
+:root[data-theme="light"] .theme-toggle-sun {
+  color: var(--background);
+}
+
+:root[data-theme="light"] .theme-toggle-moon {
+  color: var(--muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-toggle,
+  .theme-toggle-thumb {
+    transition: none;
+  }
 }
 
 .contacts {
