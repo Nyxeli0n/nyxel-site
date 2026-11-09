@@ -257,10 +257,6 @@ main {
 .project-link[target="_blank"]::after {
   content: none;
 }
-.project-link[target="_blank"] .project-name::after {
-  content: " ↗";
-  font-size: 0.85em;
-}
 .prose {
   line-height: var(--body-leading);
   overflow-wrap: anywhere;
