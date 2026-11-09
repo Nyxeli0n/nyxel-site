@@ -28,7 +28,15 @@ const context = vm.createContext({
   },
 });
 vm.runInContext(compiled, context);
-const readProjects = context.exports.readProjects;
+const readProjects = async () => {
+  const entries = JSON.parse(JSON.stringify(await context.exports.readProjects()));
+  const artwork = entries.shift();
+  assert.equal(artwork.name, "VEIN");
+  assert.equal(artwork.href, "https://vein.nyxelion.dev");
+  assert.equal(artwork.number, String(entries.length + 1).padStart(2, "0"));
+  assert.equal(entries.some((entry) => entry.href.includes("/vein")), false);
+  return entries;
+};
 const repo = (id, created_at, extra = {}) => ({
   id,
   name: `repo-${id}`,

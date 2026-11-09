@@ -40,7 +40,7 @@ export async function readProjects() {
         Date.parse(b.created_at) - Date.parse(a.created_at) || b.id - a.id,
     );
 
-  return projects.map((repository, index) => ({
+  const publicProjects = projects.map((repository, index) => ({
     name: repository.name,
     description:
       repository.name.toLowerCase() === "nyxel-site"
@@ -49,4 +49,13 @@ export async function readProjects() {
     href: `https://github.com/${owner}/${encodeURIComponent(repository.name)}`,
     number: String(projects.length - index).padStart(2, "0"),
   }));
+  return [
+    {
+      name: "VEIN",
+      description: "WebGPUによる液体金属のインタラクティブアート",
+      href: "https://vein.nyxelion.dev",
+      number: String(publicProjects.length + 1).padStart(2, "0"),
+    },
+    ...publicProjects,
+  ];
 }
