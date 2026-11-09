@@ -3,6 +3,7 @@ import { createClient } from "@sanity/client";
 import type { Favorite, DiaryEntry } from "../content";
 import { cache } from "react";
 import { safeHttpsUrl, safeLink } from "./urls";
+import { defaultBio } from "../../../sanity/site-defaults";
 
 export type SiteContent = {
   bio: string[];
@@ -41,6 +42,7 @@ export const readContent = cache(async (): Promise<SiteContent> => {
   });
   return {
     ...content,
+    bio: content.bio.length > 0 ? content.bio : defaultBio,
     books: content.books.map(cleanWork),
     movies: content.movies.map(cleanWork),
   };

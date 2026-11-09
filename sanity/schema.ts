@@ -1,4 +1,5 @@
 import { defineField, defineType, type SchemaTypeDefinition } from "sanity";
+import { defaultBio } from "./site-defaults";
 
 const richText = (name: string, title: string) =>
   defineField({ name, title, type: "array", of: [{ type: "block" }] });
@@ -183,7 +184,10 @@ export const schemaTypes: SchemaTypeDefinition[] = [
       defineField({
         name: "bio",
         title: "自己紹介",
+        description:
+          "未入力の場合は初期の自己紹介を表示します。文章を変更する場合は、ここに段落を追加してください。",
         type: "array",
+        initialValue: defaultBio,
         of: [{ type: "text", rows: 5 }],
       }),
     ],
