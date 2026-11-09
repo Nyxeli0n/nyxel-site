@@ -8,9 +8,13 @@ import type { Favorite } from "../content";
 export default function MediaDialog({
   item,
   children,
+  triggerClass = "",
+  showLinks = true,
 }: {
   item: Favorite;
   children: React.ReactNode;
+  triggerClass?: string;
+  showLinks?: boolean;
 }) {
   const links =
     item.links ?? (item.href ? [{ label: "公式サイト", href: item.href }] : []);
@@ -18,7 +22,7 @@ export default function MediaDialog({
   return (
     <Dialog.Root>
       <Dialog.Trigger
-        className="media-trigger"
+        className={`media-trigger ${triggerClass}`}
         aria-label={`${item.name}を開く`}
       >
         {children}
@@ -53,7 +57,7 @@ export default function MediaDialog({
                   ))}
                 </dl>
               )}
-              {links.length > 0 && (
+              {showLinks && links.length > 0 && (
                 <nav className="detail-links" aria-label="作品のリンク">
                   {links.map((link, i) => (
                     <a
