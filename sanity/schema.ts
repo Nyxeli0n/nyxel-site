@@ -1,5 +1,6 @@
 import { defineField, defineType, type SchemaTypeDefinition } from "sanity";
 import { defaultBio } from "./site-defaults";
+import { blogSlug } from "./blog-slug";
 
 const richText = (name: string, title: string) =>
   defineField({ name, title, type: "array", of: [{ type: "block" }] });
@@ -163,7 +164,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
         name: "slug",
         title: "URLの末尾",
         type: "slug",
-        options: { source: "title" },
+        options: { source: "title", slugify: blogSlug },
         validation: (r) => r.required(),
       }),
       defineField({
