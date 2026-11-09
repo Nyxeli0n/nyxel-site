@@ -74,8 +74,11 @@ batches = [[
   repo(2, newest.created_at, { description: "Another project" }),
 ]];
 assert.deepEqual(
-  plain(await readProjects()).map(({ description }) => description),
-  ["Another project", "本サイト"],
+  plain(await readProjects()).map(({ description, href }) => [description, href]),
+  [
+    ["Another project", "https://github.com/Nyxeli0n/repo-2"],
+    ["本サイト", "https://nyxelion.dev"],
+  ],
 );
 batches = [[old, newest]];
 assert.deepEqual(
