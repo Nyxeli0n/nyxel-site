@@ -4,7 +4,7 @@ import type { Favorite } from "../content";
 
 export default function PosterGrid({ movies }: { movies: Favorite[] }) {
   return (
-    <ul className="poster-grid" aria-label="Movies">
+    <ul className="poster-grid" aria-label="Movie reviews">
       {movies.map((movie) => {
         const poster = (
           <>

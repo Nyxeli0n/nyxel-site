@@ -30,7 +30,7 @@ export default async function Page({ params }: Props) {
       <ul className="back-link">
         <li className="project-card">
           <Link className="project-link" href="/diary">
-            Diary
+            Blog
           </Link>
         </li>
       </ul>

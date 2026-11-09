@@ -61,6 +61,14 @@ assert.deepEqual(
 );
 assert.equal(calls[0].options.next.revalidate, 300);
 assert.equal(calls[0].options.headers.Authorization, undefined);
+batches = [[
+  repo(1, old.created_at, { name: "nyxel-site", description: "Old description" }),
+  repo(2, newest.created_at, { description: "Another project" }),
+]];
+assert.deepEqual(
+  plain(await readProjects()).map(({ description }) => description),
+  ["Another project", "本サイト"],
+);
 batches = [[old, newest]];
 assert.deepEqual(
   plain(await readProjects()).map((p) => p.number),

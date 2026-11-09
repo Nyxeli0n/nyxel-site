@@ -8,6 +8,7 @@ export type Favorite = {
   color?: string;
   aspectRatio?: string;
   review?: string;
+  rating?: number;
   reviewBlocks?: PortableTextBlock[];
   facts?: { label: string; value: string }[];
   links?: { label: string; href: string }[];

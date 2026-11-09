@@ -112,6 +112,10 @@ h1 {
   row-gap: 28px;
 }
 
+.page-navigation a {
+  white-space: nowrap;
+}
+
 .page-navigation a[aria-current="page"] {
   color: var(--foreground);
 }
@@ -692,4 +696,11 @@ button:focus-visible {
   padding-left: 20px;
   border-left: 1px solid var(--line);
   color: var(--muted);
+}
+
+.review-rating {
+  margin-bottom: 24px;
+  font-size: 20px;
+  letter-spacing: 0.12em;
+  line-height: 1.5;
 }

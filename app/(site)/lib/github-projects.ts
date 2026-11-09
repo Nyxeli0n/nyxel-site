@@ -42,7 +42,10 @@ export async function readProjects() {
 
   return projects.map((repository, index) => ({
     name: repository.name,
-    description: repository.description ?? "",
+    description:
+      repository.name.toLowerCase() === "nyxel-site"
+        ? "本サイト"
+        : repository.description ?? "",
     href: `https://github.com/${owner}/${encodeURIComponent(repository.name)}`,
     number: String(projects.length - index).padStart(2, "0"),
   }));

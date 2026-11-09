@@ -106,6 +106,22 @@ function work(name: "book" | "movie", title: string) {
             }),
           ]
         : []),
+      defineField({
+        name: "rating",
+        title: "星評価",
+        type: "number",
+        group: "review",
+        initialValue: 5,
+        description: "5段階の評価。未設定の既存作品は星5で表示されます。",
+        options: {
+          list: [1, 2, 3, 4, 5].map((value) => ({
+            title: "★".repeat(value) + "☆".repeat(5 - value),
+            value,
+          })),
+          layout: "radio",
+        },
+        validation: (r) => r.integer().min(1).max(5),
+      }),
       { ...richText("review", "自分の感想"), group: "review" },
       defineField({
         name: "order",

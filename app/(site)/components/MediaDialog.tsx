@@ -18,6 +18,7 @@ export default function MediaDialog({
 }) {
   const links =
     item.links ?? (item.href ? [{ label: "公式サイト", href: item.href }] : []);
+  const rating = Math.min(5, Math.max(1, Math.round(item.rating ?? 5)));
   return (
     <Dialog.Root>
       <Dialog.Trigger
@@ -72,6 +73,15 @@ export default function MediaDialog({
               )}
             </aside>
             <article className="media-review" aria-label="感想" lang="ja">
+              <div
+                className="review-rating"
+                role="img"
+                aria-label={`5点満点中${rating}点`}
+              >
+                <span aria-hidden="true">
+                  {"★".repeat(rating)}{"☆".repeat(5 - rating)}
+                </span>
+              </div>
               {item.reviewBlocks?.length ? (
                 <RichText value={item.reviewBlocks} />
               ) : item.review ? (

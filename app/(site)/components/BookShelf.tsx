@@ -5,7 +5,7 @@ import type { Favorite } from "../content";
 
 export default function BookShelf({ books }: { books: Favorite[] }) {
   return (
-    <ul className="book-shelf" aria-label="Books">
+    <ul className="book-shelf" aria-label="Book reviews">
       {books.map((book) => {
         const cover = (
           <span

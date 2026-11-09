@@ -18,7 +18,7 @@ const client = createClient({
   useCdn: false,
   perspective: "published",
 });
-const work = `name,creator,"cover":coalesce(cover.asset->url,coverUrl),"aspectRatio":select(defined(cover.asset)=>string(cover.asset->metadata.dimensions.width)+" / "+string(cover.asset->metadata.dimensions.height),aspectRatio),facts,links,"reviewBlocks":review`;
+const work = `name,creator,"rating":coalesce(rating,5),"cover":coalesce(cover.asset->url,coverUrl),"aspectRatio":select(defined(cover.asset)=>string(cover.asset->metadata.dimensions.width)+" / "+string(cover.asset->metadata.dimensions.height),aspectRatio),facts,links,"reviewBlocks":review`;
 export const readContent = cache(async (): Promise<SiteContent> => {
   const content = await client.fetch<SiteContent>(
     `{

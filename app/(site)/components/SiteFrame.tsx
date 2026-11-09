@@ -8,9 +8,9 @@ import ThemeToggle from "./ThemeToggle";
 const pages = [
   { href: "/", title: "About" },
   { href: "/projects", title: "Projects" },
-  { href: "/books", title: "Books" },
-  { href: "/movies", title: "Movies" },
-  { href: "/diary", title: "Diary" },
+  { href: "/books", title: "Book reviews" },
+  { href: "/movies", title: "Movie reviews" },
+  { href: "/diary", title: "Blog" },
 ];
 
 export default function SiteFrame({ children }: { children: React.ReactNode }) {
